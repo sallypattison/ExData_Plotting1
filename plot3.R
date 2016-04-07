@@ -1,0 +1,13 @@
+power <- read.csv("household_power_consumption.txt", sep = ";", na.strings = "?")
+power$Date <- as.Date(power$Date, "%d/%m/%Y")
+power_sub <- subset(power, power$Date >= "2007-02-01" & power$Date <"2007-02-03") 
+power_sub$Date <- as.character(power_sub$Date)
+DateTime <- with(power_sub, paste(Date, Time))
+DateTime2 <- as.POSIXct(DateTime, format = "%Y-%m-%d %H:%M:%S")
+power_sub2 <- cbind(power_sub, DateTime2)
+png(filename = "plot3.png", width = 480, height = 480, units = "px")
+with(power_sub2, plot(DateTime2, Sub_metering_1, xlab ="", ylab = "Energy sub metering", type = "l"))
+with(power_sub2, lines(DateTime2, Sub_metering_2, col = "red"))
+with(power_sub2, lines(DateTime2, Sub_metering_3, col = "blue")) 
+legend("topright", c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), lty = 1, lwd = 2, col = c("black", "red", "blue")) ##work out how to show line
+dev.off()
